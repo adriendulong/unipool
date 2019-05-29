@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { useWeb3Context } from 'web3-react'
+
+import Main from './Main'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const context = useWeb3Context()
+  
+
+  useEffect(() => {
+    context.setConnector('Network')
+  }, [])
+
+  useEffect(() => {
+    console.log(context.error)
+  }, [context.error])
+
+  if (!context.active && !context.error) {
+    return (<p>Loading</p>)
+  } else if (context.error) {
+    //error
+    return (
+      <p>{context.error}</p>
+    )
+  } else {
+    // success
+    return (
+      <Main/>
+    )
+  }
 }
 
 export default App;
